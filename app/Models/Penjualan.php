@@ -29,4 +29,8 @@ class Penjualan extends Model
     {
         return $this->belongsTo(Tiket::class, 'id_tiket');
     }
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
 }

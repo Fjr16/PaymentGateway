@@ -15,8 +15,8 @@
             margin: 0 auto;
             text-align: center;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            border: 2px solid #ccc;
+            border-radius: 20px;
         }
         p {
             text-transform: uppercase;
@@ -26,15 +26,12 @@
 
 <body>
     <div class="container">
-        <img src="/assets/admin/img/logo.png" alt="Logo" style="height: 50px; margin-right: 10px;">
-        <p style="font-weight: bold; font-size: 40px; margin-bottom: 0; margin-top:1px;">{{ $data['payment_type'] }}</p>
-        <p style="margin-bottom : 20px; margin-top:0; color:green; font-weight:bold;">{{ $data['transaction_status'] == 'settlement' ? 'SUCCESS' : $data['transaction_status'] }}</p>
-        <span style="margin: 0;">{{ $data['transaction_id'] }}</span>
-        <p>{{ $data['transaction_time'] }}</p>
-        {{-- <p>Nama Wahana : {{ $data->tiket->wahana->nama }}</p> --}}
-        {{-- <p>Nama Pembeli : {{ $data->user->name }}</p> --}}
-        {{-- <p>Jumlah : {{ $data->jumlah }}</p> --}}
-        <p>{{ number_format($data['gross_amount']) }}</p>
+        <img src="/assets/admin/img/logo.png" alt="Logo" style="height: 100px; margin-right: 0px;">
+        <p style="font-weight: bold; font-size: 40px; margin-bottom: 0; margin-top:1px;">{{ $item->payment_type ?? '' }}</p>
+        <p style="margin-bottom : 20px; margin-top:0; color:green; font-weight:bold;">{{ $item->transaction_status == 'settlement' ? 'SUCCESS' : $item->transaction_status }}</p>
+        <span style="margin: 0;">{{ $item->transaction_id ?? '' }}</span>
+        <p>{{ $item->transaction_time ?? '' }}</p>
+        <p>Rp. {{ number_format($item->total_pembayaran ?? '') }}</p>
         <!-- Tidak ada barcode -->
     </div>
 

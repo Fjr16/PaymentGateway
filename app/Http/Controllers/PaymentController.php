@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use App\Models\Penjualan;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -94,23 +95,26 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        $item = Penjualan::find($id);
-        $encodeServerKey = base64_encode(env('MIDTRANS_SERVER_KEY'));
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Basic ' .$encodeServerKey,
-        ])
-        ->withUrlParameters([
-            'endpoint' => 'https://api.sandbox.midtrans.com/v2',
-            'order_id' => $item->order_id,
-            'topic' => 'status',
-        ])->get('{+endpoint}/{order_id}/{topic}');
+        $penjualan = Penjualan::find($id);
+        $item = Payment::where('penjualan_id', $penjualan->id)->first();
+        // start get status transaction via api
+        // $encodeServerKey = base64_encode(env('MIDTRANS_SERVER_KEY'));
+        // $response = Http::withHeaders([
+        //     'accept' => 'application/json',
+        //     'Content-Type' => 'application/json',
+        //     'Authorization' => 'Basic ' .$encodeServerKey,
+        // ])
+        // ->withUrlParameters([
+        //     'endpoint' => 'https://api.sandbox.midtrans.com/v2',
+        //     'order_id' => $item->payment->order_id,
+        //     'topic' => 'status',
+        // ])->get('{+endpoint}/{order_id}/{topic}');
+        // end gett status
 
-        $data = $response->json();
+        // $data = $response->json();
 
         return view('frontend.buktiPembayaran.show', [
-            'data' => $data,
+            'item' => $item,
         ]);
     }
 
@@ -136,11 +140,18 @@ class PaymentController extends Controller
     {
         $data = $request->all();
         $item = Penjualan::find($id);
-        if($item){
+        $payStore = Payment::create([
+            'penjualan_id' => $item->id,
+            'transaction_id' =>  $data['transaction_id'],
+            'order_id' => $data['order_id'],
+            'transaction_status' => $data['transaction_status'],
+            'transaction_time' => $data['transaction_time'],
+            'payment_type' => $data['payment_type'],
+            'total_pembayaran' => $data['total_pembayaran'],
+        ]);
+        if($payStore){
             $item->update([
                 'status' => 'Selesai',
-                'order_id' => $data['order_id'],
-                'transaction_id' => $data['transaction_id'],
             ]);
             return response()->json(['status' => 'Berhasil', 'message' => 'Pembayaran Berhasil !!', 'data' => $data], 200);
         }else{
