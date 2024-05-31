@@ -180,6 +180,37 @@
     {{-- midtrans js --}}
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-YHAhBNd0hBkEssCy"></script>
 
+    {{-- wheaterbit api --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const apiKey = '94bdcf33b08c4adc847eef327032a91f'; // Ganti dengan API Key Anda
+            const lat = '-0.94738'; //latitude
+            const lon = '100.35200'; // longitude
+            const lang = 'id'; // bahasa
+            const url = `https://api.weatherbit.io/v2.0/current?key=${apiKey}&lang=${lang}&lat=${lat}&lon=${lon}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const weatherData = data.data[0];
+                    const weatherElement = document.getElementById('weather');
+                    const iconCode = weatherData.weather.icon;
+                    
+                    weatherElement.innerHTML = `
+                        <img src="https://www.weatherbit.io/static/img/icons/${iconCode}.png" alt="Weather Icon">
+                        <p><strong>City:</strong> ${weatherData.city_name}</p>
+                        <p><strong>Temperature:</strong> ${weatherData.temp} °C</p>
+                        <p><strong>Weather:</strong> ${weatherData.weather.description}</p>
+                        <p><strong>Wind Speed:</strong> ${weatherData.wind_spd} m/s</p>
+                        <p><strong>Humidity:</strong> ${weatherData.rh} %</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching the weather data:', error);
+                });
+        });
+    </script>
+
     <!-- Template Main JS File -->
     <script src="/assets/frontend/js/main.js"></script>
 

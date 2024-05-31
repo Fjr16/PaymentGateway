@@ -199,6 +199,13 @@
                             </form>
                         </div>
 
+                        <div class="weather-container">
+                            <h1>Current Weather</h1>
+                            <div id="weather" class="weather-info">
+                                <!-- Weather data will be inserted here -->
+                            </div>
+                        </div>
+
                     </div>
                 @endif
             </div>
