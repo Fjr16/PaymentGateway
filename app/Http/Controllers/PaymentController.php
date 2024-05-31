@@ -106,7 +106,7 @@ class PaymentController extends Controller
         // ])
         // ->withUrlParameters([
         //     'endpoint' => 'https://api.sandbox.midtrans.com/v2',
-        //     'order_id' => $item->payment->order_id,
+        //     'order_id' => $penjualan->payment->order_id,
         //     'topic' => 'status',
         // ])->get('{+endpoint}/{order_id}/{topic}');
         // end gett status
@@ -115,6 +115,7 @@ class PaymentController extends Controller
 
         return view('frontend.buktiPembayaran.show', [
             'item' => $item,
+            // 'data' => $data,
         ]);
     }
 
@@ -149,9 +150,10 @@ class PaymentController extends Controller
             'payment_type' => $data['payment_type'],
             'total_pembayaran' => $data['total_pembayaran'],
         ]);
+        $status = ($data['transaction_status'] == 'settlement') ? 'Selesai' : $data['transaction_status'];
         if($payStore){
             $item->update([
-                'status' => 'Selesai',
+                'status' => $status,
             ]);
             return response()->json(['status' => 'Berhasil', 'message' => 'Pembayaran Berhasil !!', 'data' => $data], 200);
         }else{

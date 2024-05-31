@@ -52,12 +52,19 @@
                                     <td>{{ $penjualan->tiket->harga }}</td>
                                     <td>{{ $penjualan->jumlah }}</td>
                                     <td>{{ $penjualan->harga_total }}</td>
-                                    <td>{{ $penjualan->status }}</td>
+                                    <td>{{ $penjualan->payment ? ($penjualan->payment->transaction_status == 'settlement' ? 'Selesai' : $penjualan->payment->transaction_status) : $penjualan->status }}</td>
                                     <td>
-                                        @if ($penjualan->bukti_pembayaran)
-                                            <a href="{{ url('gambar/bukti-pembayaran/' . $penjualan->bukti_pembayaran) }}"
-                                                target="_blank">Lihat</a>
+                                        @if ($penjualan->status == 'Selesai')                                            
+                                            @if ($penjualan->payment)
+                                                <a href="{{ route('api/pembayaran/transaction.show', $penjualan->id) }}" class="btn btn-primary w-100"
+                                                    target="_blank">SHOW</a>
+                                            @else
+                                                <button class="btn btn-dark" disabled>NOT FOUND</button>
+                                            @endif
+                                        @else
+                                            <button class="btn btn-primary w-100" disabled>MENUNGGU</button>
                                         @endif
+                                        
                                     </td>
 
                                     <td>

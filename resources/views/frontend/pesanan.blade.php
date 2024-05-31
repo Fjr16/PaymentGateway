@@ -196,11 +196,41 @@
                             },
                             onPending : function(result){
                                 alert('Pembayaran Pending');
-                                console.log('result');
+                                var dataToUpdate = {
+                                    'status_code' : result.status_code,
+                                    'transaction_id' : result.transaction_id,
+                                    'transaction_status' : result.transaction_status,
+                                    'transaction_time' : result.transaction_time,
+                                    'payment_type' : result.payment_type,
+                                    'order_id' : result.order_id,
+                                    'total_pembayaran' : result.gross_amount
+                                };
+                                fetch("{{ route('api/pembayaran.update', '') }}/" + id_pesanan, {
+                                    method : 'POST',
+                                    headers : {
+                                        'Content-Type' : 'application/json'
+                                    },
+                                    body : JSON.stringify(dataToUpdate),
+                                })
                             },
                             onError : function(result){
                                 alert('Pembayaran Gagal');
-                                console.log(result);
+                                var dataToUpdate = {
+                                    'status_code' : result.status_code,
+                                    'transaction_id' : result.transaction_id,
+                                    'transaction_status' : result.transaction_status,
+                                    'transaction_time' : result.transaction_time,
+                                    'payment_type' : result.payment_type,
+                                    'order_id' : result.order_id,
+                                    'total_pembayaran' : result.gross_amount
+                                };
+                                fetch("{{ route('api/pembayaran.update', '') }}/" + id_pesanan, {
+                                    method : 'POST',
+                                    headers : {
+                                        'Content-Type' : 'application/json'
+                                    },
+                                    body : JSON.stringify(dataToUpdate),
+                                })
                             },
                             onClose : function(){
                                 alert('Pembayaran belum selesai, Checkout Kembali untuk melanjutkan')
